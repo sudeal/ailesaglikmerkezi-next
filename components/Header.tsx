@@ -29,28 +29,27 @@ export default function Header() {
     <header
       id="yt_header"
       role="banner"
-      className="block h-[41.5px] overflow-hidden bg-[#DC0D15] font-sans text-[14px] leading-[22px] text-[#444444] shadow-[inset_0_-1px_0_rgba(255,255,255,0.07),inset_0_5px_0_rgba(0,0,0,0.3)]"
+      className="block min-h-[41.5px] bg-[#DC0D15] font-sans text-[14px] leading-[22px] text-[#444444] shadow-[inset_0_-1px_0_rgba(255,255,255,0.07),inset_0_5px_0_rgba(0,0,0,0.3)] md:h-[41.5px] md:overflow-hidden"
     >
-      <div className="mx-auto flex h-full max-w-[1170px] items-start justify-between px-[15px]">
-        <div className="hidden pt-[10px] text-[16px] leading-[22px] text-white md:block">
+      <div className="mx-auto flex h-full max-w-[1170px] items-center justify-between gap-3 px-[15px] py-1.5 md:items-start md:py-0">
+        <div className="min-w-0 pt-0 text-[13px] leading-[22px] text-white sm:text-[16px] md:pt-[10px]">
           <a
             href="mailto:info@salihlicapakliasm.com"
-            className="inline-flex items-center gap-1.5"
+            className="mr-3 hidden items-center gap-1.5 md:inline-flex"
           >
             <FaEnvelope aria-hidden className="size-4 shrink-0" />
             info@salihlicapakliasm.com
           </a>
-          <span className="inline-block w-3" aria-hidden />
           <a
             href="tel:+902368684643"
             className="inline-flex items-center gap-1.5"
           >
             <FaPhoneSquare aria-hidden className="size-4 shrink-0" />
-            +90 236 868 46 43
+            <span className="truncate">+90 236 868 46 43</span>
           </a>
         </div>
 
-        <nav aria-label="Sosyal medya" className="ml-auto pt-[5px]">
+        <nav aria-label="Sosyal medya" className="shrink-0 md:pt-[5px]">
           <ul className="m-0 flex list-none p-0">
             {socialLinks.map(({ href, label, Icon }) => (
               <li key={label} className="my-px mr-2.5">

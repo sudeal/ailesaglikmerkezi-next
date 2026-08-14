@@ -40,8 +40,8 @@ export default function ContactSection() {
   }
 
   return (
-    <div className="relative mx-auto w-full max-w-[1170px] px-[15px] pt-[50px] pb-16 text-white">
-      <h3 className="m-0 text-center text-[28px] font-normal tracking-wide text-white uppercase">
+    <div className="relative mx-auto w-full max-w-[1170px] px-[15px] pt-10 pb-12 text-white sm:pt-[50px] sm:pb-16">
+      <h3 className="m-0 text-center text-[22px] font-normal tracking-wide text-white uppercase sm:text-[28px]">
         İLETİŞİM
       </h3>
       <div className="mx-auto my-4 flex w-[220px] items-center">
@@ -50,8 +50,8 @@ export default function ContactSection() {
         <span className="h-px flex-1 bg-white" />
       </div>
 
-      <div className="mt-8 grid gap-10 md:grid-cols-2">
-        <div>
+      <div className="mt-8 grid grid-cols-12 gap-8 md:gap-10">
+        <div className="col-span-12 md:col-span-6">
           <h2 className="el-heading m-0 text-[20px] font-normal text-white uppercase">
             İLETİŞİM BİLGİLERİ
           </h2>
@@ -92,7 +92,7 @@ export default function ContactSection() {
           </div>
         </div>
 
-        <div>
+        <div className="col-span-12 md:col-span-6">
           <h2 className="el-heading m-0 mb-5 text-[20px] font-normal text-white uppercase">
             İLETİŞİM FORMU
           </h2>
@@ -148,8 +148,8 @@ export default function ContactSection() {
               className={`${fieldClass} min-h-[120px] resize-y`}
             />
 
-            <div className="mb-3 flex items-start gap-2">
-              <div className="flex h-12 min-w-[160px] items-center justify-center bg-[#9ACD32] px-4 font-mono text-[22px] tracking-[0.35em] text-white select-none">
+            <div className="mb-3 flex flex-wrap items-start gap-2">
+              <div className="flex h-12 min-w-0 items-center justify-center bg-[#9ACD32] px-3 font-mono text-[18px] tracking-[0.25em] text-white select-none sm:min-w-[160px] sm:px-4 sm:text-[22px] sm:tracking-[0.35em]">
                 {captcha}
               </div>
               <button

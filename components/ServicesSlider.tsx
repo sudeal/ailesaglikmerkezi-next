@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
-const VISIBLE = 4;
 
 const services = [
   {
@@ -55,24 +53,49 @@ const services = [
   },
 ];
 
-const maxIndex = services.length - VISIBLE;
+function useVisibleCount() {
+  const [visible, setVisible] = useState(1);
+
+  useEffect(() => {
+    function update() {
+      const width = window.innerWidth;
+      if (width >= 1280) setVisible(4);
+      else if (width >= 1024) setVisible(3);
+      else if (width >= 640) setVisible(2);
+      else setVisible(1);
+    }
+
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  return visible;
+}
 
 export default function ServicesSlider() {
   const [index, setIndex] = useState(0);
+  const visible = useVisibleCount();
+  const maxIndex = Math.max(0, services.length - visible);
+  const gap = 16;
+
+  useEffect(() => {
+    setIndex((value) => Math.min(value, maxIndex));
+  }, [maxIndex]);
 
   return (
     <div className="mt-8">
-      <h3 className="m-0 border-b border-[#ccc] pb-2.5 text-[24px] font-light text-[#222433]">
+      <h3 className="m-0 border-b border-[#ccc] pb-2.5 text-[20px] font-light text-[#222433] sm:text-[24px]">
         Hizmetlerimiz
       </h3>
 
-      <div className="relative mt-5">
+      <div className="relative mt-5 px-8 sm:px-10">
         <button
           type="button"
           aria-label="Önceki"
           disabled={index === 0}
           onClick={() => setIndex((value) => Math.max(0, value - 1))}
-          className="absolute top-[95px] left-0 z-10 flex h-16 w-8 items-center justify-center bg-black/40 text-white disabled:cursor-default disabled:opacity-30"
+          className="absolute top-[70px] left-0 z-10 flex h-12 w-7 items-center justify-center bg-black/40 text-white sm:top-[95px] sm:h-16 sm:w-8 disabled:cursor-default disabled:opacity-30"
         >
           <FaChevronLeft />
         </button>
@@ -81,23 +104,26 @@ export default function ServicesSlider() {
           aria-label="Sonraki"
           disabled={index >= maxIndex}
           onClick={() => setIndex((value) => Math.min(maxIndex, value + 1))}
-          className="absolute top-[95px] right-0 z-10 flex h-16 w-8 items-center justify-center bg-black/40 text-white disabled:cursor-default disabled:opacity-30"
+          className="absolute top-[70px] right-0 z-10 flex h-12 w-7 items-center justify-center bg-black/40 text-white sm:top-[95px] sm:h-16 sm:w-8 disabled:cursor-default disabled:opacity-30"
         >
           <FaChevronRight />
         </button>
 
         <div className="overflow-hidden">
           <div
-            className="flex gap-4 transition-transform duration-300 ease-out"
+            className="flex transition-transform duration-300 ease-out"
             style={{
-              transform: `translateX(calc(-${index} * (100% + 1rem) / 4))`,
+              gap,
+              transform: `translateX(calc(-${index} * (100% + ${gap}px) / ${visible}))`,
             }}
           >
             {services.map((service) => (
               <article
                 key={service.href}
                 className="min-w-0 shrink-0"
-                style={{ width: "calc((100% - 3rem) / 4)" }}
+                style={{
+                  width: `calc((100% - ${(visible - 1) * gap}px) / ${visible})`,
+                }}
               >
                 <Link href={service.href} className="block">
                   <img
@@ -105,10 +131,10 @@ export default function ServicesSlider() {
                     alt={service.title}
                     width={370}
                     height={270}
-                    className="h-[180px] w-full object-cover"
+                    className="h-[140px] w-full object-cover sm:h-[180px]"
                   />
                 </Link>
-                <h4 className="mt-2.5 mb-1.5 text-[18px] font-bold text-[#DC0D15]">
+                <h4 className="mt-2.5 mb-1.5 text-[16px] font-bold text-[#DC0D15] sm:text-[18px]">
                   <Link href={service.href}>{service.title}</Link>
                 </h4>
                 <p className="m-0 line-clamp-3 text-[13px] leading-[1.6] text-[#444444]">

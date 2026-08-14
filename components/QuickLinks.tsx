@@ -46,24 +46,29 @@ const boxes = [
 export default function QuickLinks() {
   return (
     <section className="bg-white">
-      <div className="mx-auto min-h-[645px] w-[1037px] max-w-full pt-8 pb-8">
-        <ul className="m-0 flex list-none gap-6 p-0">
-          {boxes.map(({ href, title, label, Icon, ...rest }) => {
+      <div className="container mx-auto max-w-[1170px] px-[15px] pt-8 pb-8">
+        <ul className="m-0 grid list-none grid-cols-12 gap-4 p-0 md:gap-6">
+          {boxes.map(({ href, title, label, Icon, ...rest }, index) => {
             const external = "external" in rest && rest.external;
             const className =
-              "main flex h-[180px] w-full flex-col items-center justify-center bg-[#DC0D15] font-sans text-[14px] text-white hover:bg-[#454541]";
+              "main flex h-[140px] w-full flex-col items-center justify-center bg-[#DC0D15] font-sans text-[14px] text-white hover:bg-[#454541] sm:h-[160px] lg:h-[180px]";
 
             const content = (
               <>
-                <Icon aria-hidden className="text-[48px]" />
-                <span className="title mt-2.5 text-center text-[20px] font-normal">
+                <Icon aria-hidden className="text-[36px] sm:text-[48px]" />
+                <span className="title mt-2.5 px-2 text-center text-[16px] font-normal sm:text-[20px]">
                   {label}
                 </span>
               </>
             );
 
             return (
-              <li key={label} className="min-w-0 flex-1">
+              <li
+                key={label}
+                className={`col-span-12 min-w-0 sm:col-span-6 lg:col-span-4 xl:col-span-2 ${
+                  index === 0 ? "xl:col-start-2" : ""
+                }`}
+              >
                 {external ? (
                   <a
                     href={href}

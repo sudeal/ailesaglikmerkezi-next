@@ -8,39 +8,39 @@ export default function Navbar() {
   return (
     <nav
       id="yt_menuwrap"
-      className="sticky top-0 z-50 block h-[100px] border-t border-[#DC0D15] bg-white font-sans text-[14px] text-[#444444] shadow-[1px_1px_4px_rgba(0,0,0,0.2)]"
+      className="sticky top-0 z-50 block min-h-[80px] border-t border-[#DC0D15] bg-white font-sans text-[14px] text-[#444444] shadow-[1px_1px_4px_rgba(0,0,0,0.2)] md:h-[100px] md:min-h-[100px]"
     >
       <div className="container mx-auto h-full max-w-[1170px] px-[15px]">
-        <div className="row flex h-full items-center justify-between">
-          <div className="row flex h-full w-full items-center justify-between">
-            <div id="yt_logo" className="w-[75%] py-2.5 md:w-1/3">
-              <Link
-                href="/"
-                className="logo flex items-center gap-2.5"
-                title={SITE_NAME}
-              >
-                <div className="h-20 w-20 shrink-0 overflow-hidden">
-                  <img
-                    src={LOGO_SRC}
-                    alt={SITE_NAME}
-                    width={317}
-                    height={80}
-                    className="h-20 w-[317px] max-w-none"
-                  />
+        <div className="grid h-full grid-cols-12 items-center">
+          <div id="yt_logo" className="col-span-10 py-2 lg:col-span-4">
+            <Link
+              href="/"
+              className="logo flex min-w-0 items-center gap-2 sm:gap-2.5"
+              title={SITE_NAME}
+            >
+              <div className="h-14 w-14 shrink-0 overflow-hidden sm:h-20 sm:w-20">
+                <img
+                  src={LOGO_SRC}
+                  alt={SITE_NAME}
+                  width={317}
+                  height={80}
+                  className="h-14 w-[220px] max-w-none sm:h-20 sm:w-[317px]"
+                />
+              </div>
+              <div className="min-w-0 leading-[1.15]">
+                <div className="text-[9px] font-semibold tracking-wide text-[#DC0D15] uppercase sm:text-[11px]">
+                  T.C. SAĞLIK BAKANLIĞI
                 </div>
-                <div className="min-w-0 leading-[1.15]">
-                  <div className="text-[11px] font-semibold tracking-wide text-[#DC0D15] uppercase">
-                    T.C. SAĞLIK BAKANLIĞI
-                  </div>
-                  <div className="text-[12px] font-semibold tracking-wide text-[#DC0D15] uppercase">
-                    MANİSA SALİHLİ ÇAPAKLI
-                  </div>
-                  <div className="text-[18px] font-bold text-black">
-                    Aile Sağlığı Merkezi
-                  </div>
+                <div className="text-[10px] font-semibold tracking-wide text-[#DC0D15] uppercase sm:text-[12px]">
+                  MANİSA SALİHLİ ÇAPAKLI
                 </div>
-              </Link>
-            </div>
+                <div className="text-[14px] font-bold text-black sm:text-[18px]">
+                  Aile Sağlığı Merkezi
+                </div>
+              </div>
+            </Link>
+          </div>
+          <div className="col-span-2 flex justify-end lg:col-span-8">
             <NavMenu />
           </div>
         </div>
