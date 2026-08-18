@@ -7,7 +7,7 @@ import { FaAngleDown, FaBars, FaTimes } from "react-icons/fa";
 import { isNavActive, menuItems } from "@/lib/navigation";
 
 const itemLinkClass =
-  "flex items-center px-[13px] py-2 text-[15px] leading-[30px] text-[#707070] transition-colors duration-150 hover:bg-[#DC0D15] hover:text-white active:bg-[#DC0D15] active:text-white group-hover:bg-[#DC0D15] group-hover:text-white";
+  "inline-flex h-[42px] shrink-0 items-center whitespace-nowrap px-2 text-[13px] leading-none text-[#707070] transition-colors duration-150 hover:bg-[#DC0D15] hover:text-white active:bg-[#DC0D15] active:text-white group-hover:bg-[#DC0D15] group-hover:text-white xl:px-2.5 xl:text-[14px]";
 
 export default function NavMenu() {
   const [open, setOpen] = useState(false);
@@ -17,20 +17,20 @@ export default function NavMenu() {
     <div id="yt_mainmenu" className="relative w-full">
       <ul
         id="meganavigator"
-        className="relative z-[60] hidden list-none p-0 lg:flex lg:justify-end"
+        className="relative z-[60] hidden list-none flex-nowrap items-center justify-end p-0 lg:flex"
       >
         {menuItems.map((item) => {
           const active = isNavActive(pathname, item.href);
           return (
-            <li key={item.href} className="group relative z-[1] mr-px">
+            <li key={item.href} className="group relative z-[1] shrink-0">
               <Link
                 href={item.href}
                 title={item.label}
                 className={`${itemLinkClass} ${active ? "bg-[#DC0D15] text-white" : ""}`}
               >
-                <span className="menu-title">{item.label}</span>
+                <span className="menu-title whitespace-nowrap">{item.label}</span>
                 {item.children ? (
-                  <FaAngleDown aria-hidden className="ml-[5px] text-[14px]" />
+                  <FaAngleDown aria-hidden className="ml-1 shrink-0 text-[12px]" />
                 ) : null}
               </Link>
               {item.children ? (

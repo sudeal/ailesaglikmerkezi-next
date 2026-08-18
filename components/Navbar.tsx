@@ -12,7 +12,7 @@ export default function Navbar() {
     >
       <div className="container mx-auto h-full max-w-[1170px] px-[15px]">
         <div className="grid h-full grid-cols-12 items-center">
-          <div id="yt_logo" className="col-span-10 py-2 lg:col-span-4">
+          <div id="yt_logo" className="col-span-10 py-2 lg:col-span-3">
             <Link
               href="/"
               className="logo flex min-w-0 items-center gap-2 sm:gap-2.5"
@@ -40,7 +40,7 @@ export default function Navbar() {
               </div>
             </Link>
           </div>
-          <div className="col-span-2 flex justify-end lg:col-span-8">
+          <div className="col-span-2 flex min-w-0 justify-end lg:col-span-9">
             <NavMenu />
           </div>
         </div>

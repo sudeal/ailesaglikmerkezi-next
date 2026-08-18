@@ -71,6 +71,26 @@ const faqs = [
     answer:
       "Bu konuda herhangi bir kısıtlama bulunmamaktadır. Ancak aile hekimine başvurduğunuz zaman herhangi bir hasta katılım payı ödemeniz gerekmezken, hastanelere başvurduğunuzda belli bir miktar hasta katılım payı ödemeniz gerekir.",
   },
+  {
+    question: "Toplum Sağlığı Merkezi nedir?",
+    answer:
+      "Bölgesinde yaşayan toplumun sağlığını geliştirmeyi ve korumayı ön plana alarak sağlıkla ilgili risk ve sorunları belirleyen, bu sorunları gidermek için planlama yapan ve bu planları uygulayan, uygulatan; birinci basamak koruyucu, iyileştirici ve rehabilite edici sağlık hizmetlerini müdürlüğün sevk idaresinde organize eden, bu hizmetlerin verimli şekilde sunulmasını izleyen, değerlendiren ve destekleyen, bölgesinde bulunan sağlık kuruluşları ile diğer kurum ve kuruluşlar arasındaki koordinasyonu sağlayan sağlık kuruluşuna denir.",
+  },
+  {
+    question: "Aile hekimliğinde sağlık hizmetleri ücretli midir?",
+    answer:
+      "Hayır, ücretsizdir. Muayene, aşılama, enjeksiyon, pansuman, birinci basamakta yapılan tahlil ve film hizmetleri tamamıyla ücretsizdir. Bu işlemler için herhangi bir sosyal güvence aranmamaktadır. Yazılan reçeteler ise kişilerin sosyal güvencesinin durumuna göre ödenmektedir.",
+  },
+  {
+    question: "Aile hekimine nasıl kayıt yaptırılır?",
+    answer:
+      "Kişilerin aile hekimlerine ilk kaydı, aile hekimliği uygulamalarına yeni geçilen illerde sağlık müdürlüğü tarafından ikamet ettikleri bölge göz önünde bulundurularak yapılır. Bir aile hekimine kayıtlı olmayan kişiler, kendilerine en yakın aile sağlığı merkezine, toplum sağlığı merkezine ya da il sağlık müdürlüğüne müracaat ederek bir aile hekimine kayıt yaptırabilirler. İkâmet ettiği bölgeden ayrılan kişiler isterlerse aile hekimlerini değiştirebilirler.",
+  },
+  {
+    question: "Aile hekimime hangi saatlerde müracaat edebilirim?",
+    answer:
+      "Aile hekiminize çalışma saatleri içinde müracaat edebilirsiniz. Aile hekiminiz çalışma saatlerini değiştirdiği takdirde aile sağlığı merkezinde sizin rahatlıkla görebileceğiniz bir yerde bu durumu ilan edecektir.",
+  },
 ];
 
 export default function SikSorulanSorularPage() {

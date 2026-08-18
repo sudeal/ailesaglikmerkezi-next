@@ -9,11 +9,15 @@ export default function InnerPage({
   title,
   crumbs,
   views,
+  hideTitle,
+  serif,
   children,
 }: {
   title: string;
   crumbs: Crumb[];
   views?: number;
+  hideTitle?: boolean;
+  serif?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -47,18 +51,28 @@ export default function InnerPage({
       <div className="container mx-auto max-w-[1170px] px-[15px] py-8">
         <div className="grid grid-cols-12 gap-8 lg:gap-10">
           <article className="col-span-12 lg:col-span-8">
-            <h1 className="m-0 text-[28px] leading-8 font-bold text-black">
-              {title}
-            </h1>
-            {views != null ? (
-              <p className="mt-2 mb-5 flex items-center gap-1.5 text-[13px] text-[#888888]">
-                <FaEye aria-hidden />
-                <span>{views} İzleme</span>
-              </p>
-            ) : (
-              <div className="mb-5" />
+            {hideTitle ? null : (
+              <>
+                <h1
+                  className={`m-0 text-[28px] leading-8 font-bold text-black ${
+                    serif ? "font-serif" : ""
+                  }`}
+                >
+                  {title}
+                </h1>
+                {views != null ? (
+                  <p className="mt-2 mb-5 flex items-center gap-1.5 text-[13px] text-[#888888]">
+                    <FaEye aria-hidden />
+                    <span>{views} İzleme</span>
+                  </p>
+                ) : (
+                  <div className="mb-5" />
+                )}
+              </>
             )}
-            <div className="text-[14px] leading-7 text-[#333333]">{children}</div>
+            <div className="font-['Trebuchet_MS',Geneva,sans-serif] text-[16px] font-normal leading-7 text-[#444444]">
+              {children}
+            </div>
           </article>
           <div className="col-span-12 lg:col-span-4">
             <PageSidebar />
