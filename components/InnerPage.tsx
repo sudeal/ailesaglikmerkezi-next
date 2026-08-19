@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaEye } from "react-icons/fa";
+import { FaClock, FaEye } from "react-icons/fa";
 import PageSidebar from "@/components/PageSidebar";
 import ScrollToTop from "@/components/ScrollToTop";
 
@@ -9,14 +9,18 @@ export default function InnerPage({
   title,
   crumbs,
   views,
+  date,
   hideTitle,
+  hideSidebar,
   serif,
   children,
 }: {
   title: string;
   crumbs: Crumb[];
   views?: number;
+  date?: string;
   hideTitle?: boolean;
+  hideSidebar?: boolean;
   serif?: boolean;
   children: React.ReactNode;
 }) {
@@ -50,7 +54,7 @@ export default function InnerPage({
 
       <div className="container mx-auto max-w-[1170px] px-[15px] py-8">
         <div className="grid grid-cols-12 gap-8 lg:gap-10">
-          <article className="col-span-12 lg:col-span-8">
+          <article className={hideSidebar ? "col-span-12" : "col-span-12 lg:col-span-8"}>
             {hideTitle ? null : (
               <>
                 <h1
@@ -60,10 +64,20 @@ export default function InnerPage({
                 >
                   {title}
                 </h1>
-                {views != null ? (
-                  <p className="mt-2 mb-5 flex items-center gap-1.5 text-[13px] text-[#888888]">
-                    <FaEye aria-hidden />
-                    <span>{views} İzleme</span>
+                {views != null || date ? (
+                  <p className="mt-2 mb-5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-[#888888]">
+                    {date ? (
+                      <span className="flex items-center gap-1.5">
+                        <FaClock aria-hidden />
+                        <span>{date}</span>
+                      </span>
+                    ) : null}
+                    {views != null ? (
+                      <span className="flex items-center gap-1.5">
+                        <FaEye aria-hidden />
+                        <span>{views} İzleme</span>
+                      </span>
+                    ) : null}
                   </p>
                 ) : (
                   <div className="mb-5" />
@@ -74,9 +88,11 @@ export default function InnerPage({
               {children}
             </div>
           </article>
+          {hideSidebar ? null : (
           <div className="col-span-12 lg:col-span-4">
             <PageSidebar />
           </div>
+          )}
         </div>
       </div>
       <ScrollToTop />
