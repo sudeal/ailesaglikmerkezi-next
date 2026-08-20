@@ -63,7 +63,7 @@ export default function ContactSection() {
               <FaMapMarkerAlt aria-hidden className="mt-1 shrink-0" />
               <span>
                 <span className="font-semibold">Adres</span>
-                {": Çapaklı Mah. Çapaklı Cad. No:29 Salihli/Manisa"}
+                {": Çapaklı Mah. Çapaklı Cad. No:49 Salihli/Manisa"}
               </span>
             </p>
             <p className="m-0 flex gap-3">

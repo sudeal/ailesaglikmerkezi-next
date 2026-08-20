@@ -126,7 +126,7 @@ export default function Footer() {
                   <FaMapMarkerAlt aria-hidden />
                 </span>
                 <p className="m-0 pt-1 text-[13px] leading-5 text-white">
-                  Çapaklı Mah. Çapaklı Cad. No:29 Salihli/Manisa
+                  Çapaklı Mah. Çapaklı Cad. No:49 Salihli/Manisa
                 </p>
               </li>
               <li className="flex items-center gap-3">
