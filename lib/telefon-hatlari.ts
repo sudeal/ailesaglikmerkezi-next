@@ -464,3 +464,9 @@ export const telefonHatlari: TelefonHatti[] = [
 export function getTelefonHatti(slug: string) {
   return telefonHatlari.find((item) => item.slug === slug);
 }
+
+export function getTelefonHattiByNumber(number: string) {
+  return telefonHatlari.find(
+    (item) => item.slug === number || item.slug.startsWith(`${number}-`),
+  );
+}

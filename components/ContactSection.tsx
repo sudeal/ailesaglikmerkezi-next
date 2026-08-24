@@ -13,10 +13,61 @@ function createCaptcha() {
   return Array.from({ length: 6 }, () => chars[Math.floor(Math.random() * chars.length)]).join(" ");
 }
 
+const EMAIL_PATTERN =
+  /^[A-Za-z0-9](?:[A-Za-z0-9._%+-]{0,63}[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*\.[A-Za-z]{2,}$/;
+
+function getEmailError(value: string): string | null {
+  const email = value.trim();
+
+  if (!email) {
+    return "E-posta adresi zorunludur.";
+  }
+
+  if (email.includes(" ")) {
+    return "E-posta adresinde boşluk olmamalıdır.";
+  }
+
+  if (!email.includes("@")) {
+    return "E-posta adresinde @ işareti olmalıdır. Örnek: ad@ornek.com";
+  }
+
+  const parts = email.split("@");
+  if (parts.length !== 2) {
+    return "E-posta adresinde yalnızca bir @ işareti olmalıdır.";
+  }
+
+  const [local, domain] = parts;
+
+  if (!local) {
+    return "@ işaretinden önce bir kullanıcı adı olmalıdır. Örnek: ad@ornek.com";
+  }
+
+  if (!domain) {
+    return "@ işaretinden sonra bir alan adı olmalıdır. Örnek: ad@ornek.com";
+  }
+
+  if (!domain.includes(".")) {
+    return "E-posta adresinde .com gibi bir uzantı olmalıdır. Örnek: ad@ornek.com";
+  }
+
+  const tld = domain.split(".").pop() ?? "";
+  if (!/^[A-Za-z]{2,}$/.test(tld)) {
+    return "E-posta uzantısı geçersiz. .com gibi bir uzantı olmalıdır.";
+  }
+
+  if (!EMAIL_PATTERN.test(email)) {
+    return "Geçerli bir e-posta giriniz. Örnek: ad@ornek.com";
+  }
+
+  return null;
+}
+
 const fieldClass =
   "mb-3 w-full border-0 bg-white px-3 py-2.5 text-[14px] text-[#444444] outline-none placeholder:text-[#999999]";
 
 export default function ContactSection() {
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [captcha, setCaptcha] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
   const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
@@ -26,14 +77,32 @@ export default function ContactSection() {
     setCaptcha(createCaptcha());
   }, []);
 
+  function handleEmailChange(value: string) {
+    setEmail(value);
+    setStatus("idle");
+    if (emailError) {
+      setEmailError(getEmailError(value));
+    }
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const nextEmailError = getEmailError(email);
+    if (nextEmailError) {
+      setEmailError(nextEmailError);
+      setStatus("idle");
+      event.currentTarget.querySelector<HTMLInputElement>("#cainput_email")?.focus();
+      return;
+    }
+
+    setEmailError(null);
     const match =
       Boolean(captchaValue) &&
       captchaInput.replace(/ /g, "").toLowerCase() === captchaValue.toLowerCase();
     setStatus(match ? "ok" : "error");
     if (match) {
       event.currentTarget.reset();
+      setEmail("");
       setCaptchaInput("");
       setCaptcha(createCaptcha());
     }
@@ -116,12 +185,26 @@ export default function ContactSection() {
             <input
               id="cainput_email"
               name="cainput_email"
-              type="email"
-              required
+              type="text"
+              inputMode="email"
               autoComplete="email"
+              value={email}
+              onChange={(event) => handleEmailChange(event.target.value)}
+              onBlur={() => setEmailError(getEmailError(email))}
+              aria-invalid={emailError ? true : undefined}
+              aria-describedby={emailError ? "cainput_email_error" : undefined}
               placeholder="E-mail*"
-              className={fieldClass}
+              className={`${fieldClass} ${emailError ? "mb-1 ring-2 ring-[#ffb4b4]" : ""}`}
             />
+            {emailError ? (
+              <p
+                id="cainput_email_error"
+                role="alert"
+                className="mb-3 text-[13px] leading-5 text-[#ffd6d6]"
+              >
+                {emailError}
+              </p>
+            ) : null}
 
             <label className="sr-only" htmlFor="cainput_subject">
               Başlık

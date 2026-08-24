@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FaLink, FaRegHeart } from "react-icons/fa";
+import { getTelefonHattiByNumber } from "@/lib/telefon-hatlari";
 
 const articles = [
   {
@@ -20,16 +21,31 @@ const articles = [
   },
 ] as const;
 
-const hotlines = [
-  { number: "112", src: "/images/112.png", href: "/saglik-bilgi/onemli-tel-hat/112", likes: 2007 },
-  { number: "113", src: "/images/113.png", href: "/saglik-bilgi/onemli-tel-hat/113", likes: 1997 },
-  { number: "114", src: "/images/114.png", href: "/saglik-bilgi/onemli-tel-hat/114", likes: 2026 },
-  { number: "122", src: "/images/122.png", href: "/saglik-bilgi/onemli-tel-hat/122", likes: 1853 },
-  { number: "171", src: "/images/171.png", href: "/saglik-bilgi/onemli-tel-hat/171", likes: 2000 },
-  { number: "191", src: "/images/191.png", href: "/saglik-bilgi/onemli-tel-hat/191", likes: 1870 },
-  { number: "182", src: "/images/182.png", href: "/saglik-bilgi/onemli-tel-hat/182", likes: 1940 },
-  { number: "184", src: "/images/184.png", href: "/saglik-bilgi/onemli-tel-hat/184", likes: 1827 },
+const homepageHotlineNumbers = [
+  "112",
+  "113",
+  "114",
+  "122",
+  "171",
+  "191",
+  "182",
+  "184",
 ] as const;
+
+const hotlines = homepageHotlineNumbers.map((number) => {
+  const hat = getTelefonHattiByNumber(number);
+  if (!hat) {
+    throw new Error(`Eksik telefon hattı: ${number}`);
+  }
+
+  return {
+    number,
+    src: hat.image,
+    href: `/saglik-bilgi/onemli-tel-hat/${hat.slug}`,
+    title: hat.title,
+    likes: hat.views,
+  };
+});
 
 function SectionTitle({ children }: { children: string }) {
   return (
@@ -96,26 +112,28 @@ export default function HealthInfoSection() {
                 <li key={line.number} className="flex flex-col items-center">
                   <Link
                     href={line.href}
-                    title={`Alo ${line.number}`}
-                    className="group relative block aspect-square w-[72px] overflow-hidden sm:w-[88px] md:w-[78px] lg:w-[96px]"
+                    title={line.title}
+                    className="group flex flex-col items-center"
                   >
-                    <img
-                      src={line.src}
-                      alt={`Alo ${line.number}`}
-                      width={120}
-                      height={120}
-                      className="h-full w-full object-contain"
-                    />
-                    <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#E31C23]/85 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
-                      <span className="flex size-8 items-center justify-center border border-white text-[14px] text-white sm:size-9">
-                        <FaLink aria-hidden />
+                    <span className="relative block aspect-square w-[72px] overflow-hidden sm:w-[88px] md:w-[78px] lg:w-[96px]">
+                      <img
+                        src={line.src}
+                        alt={line.title}
+                        width={120}
+                        height={120}
+                        className="h-full w-full object-contain"
+                      />
+                      <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[#E31C23]/85 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
+                        <span className="flex size-8 items-center justify-center border border-white text-[14px] text-white sm:size-9">
+                          <FaLink aria-hidden />
+                        </span>
                       </span>
                     </span>
+                    <span className="mt-1 flex w-[72px] items-center justify-end gap-1 pr-0.5 text-[12px] text-[#DC0D15] sm:w-[88px] md:w-[78px] lg:w-[96px]">
+                      <FaRegHeart aria-hidden className="text-[11px]" />
+                      <span>{line.likes}</span>
+                    </span>
                   </Link>
-                  <div className="mt-1 flex w-[72px] items-center justify-end gap-1 pr-0.5 text-[12px] text-[#DC0D15] sm:w-[88px] md:w-[78px] lg:w-[96px]">
-                    <FaRegHeart aria-hidden className="text-[11px]" />
-                    <span>{line.likes}</span>
-                  </div>
                 </li>
               ))}
             </ul>

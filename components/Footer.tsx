@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SITE_URL } from "@/lib/site";
 import {
   FaEnvelope,
   FaFacebookF,
@@ -162,11 +163,8 @@ export default function Footer() {
             Copyright © 2026 Salihli Çapaklı Aile Sağlığı Merkezi
           </p>
           <p className="m-0">
-            <a
-              href="https://www.salihlicapakliasm.com"
-              className="text-[#cfcfcf] hover:text-white"
-            >
-              www.salihlicapakliasm.com
+            <a href={SITE_URL} className="text-[#cfcfcf] hover:text-white">
+              salihlicapakliasm.com
             </a>
           </p>
         </div>
