@@ -2,23 +2,23 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 import { FaLock, FaUser } from "react-icons/fa";
 import SiteLogo from "@/components/SiteLogo";
 import { getAuthErrorMessage } from "@/lib/auth-errors";
+import {
+  assertClinicUsername,
+  toAuthEmail,
+  touchUserLastLogin,
+} from "@/lib/admin-users";
 import { auth } from "@/lib/firebase";
-
-const ADMIN_EMAIL_DOMAIN = "capakliailesaglik.com";
 
 const fieldClass =
   "w-full border border-[#cccccc] bg-white px-3 py-2.5 text-[15px] text-[#444444] outline-none focus:border-[#DC0D15]";
-
-function toAuthEmail(usernameOrEmail: string): string {
-  const value = usernameOrEmail.trim();
-  if (!value) return "";
-  if (value.includes("@")) return value;
-  return `${value}@${ADMIN_EMAIL_DOMAIN}`;
-}
 
 export default function AdminLoginForm() {
   const router = useRouter();
@@ -55,6 +55,20 @@ export default function AdminLoginForm() {
 
     try {
       await signInWithEmailAndPassword(auth, nextEmail, nextPassword);
+
+      const usernameOk = await assertClinicUsername(nextUsername);
+      if (!usernameOk) {
+        await signOut(auth);
+        setError("Kullanıcı adı veya şifre hatalı.");
+        setSubmitting(false);
+        return;
+      }
+
+      try {
+        await touchUserLastLogin();
+      } catch {
+        // Auth succeeded; lastLogin update is best-effort.
+      }
       router.replace("/admin/panel");
     } catch (err) {
       const code =
@@ -107,7 +121,7 @@ export default function AdminLoginForm() {
                 setUsername(event.target.value);
                 setError(null);
               }}
-              placeholder="capakliAdmin1"
+              placeholder="Kullanıcı adınız"
               className={`${fieldClass} pl-9`}
             />
           </div>
