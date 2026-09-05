@@ -7,6 +7,7 @@ import {
   FaPhone,
   FaRedo,
 } from "react-icons/fa";
+import { submitContactForm } from "@/lib/admin-users";
 
 function createCaptcha() {
   const chars = "abcdefghijkmnpqrstuvwxyz23456789";
@@ -66,11 +67,17 @@ const fieldClass =
   "mb-3 w-full border-0 bg-white px-3 py-2.5 text-[14px] text-[#444444] outline-none placeholder:text-[#999999]";
 
 export default function ContactSection() {
+  const [nameSurname, setNameSurname] = useState("");
   const [email, setEmail] = useState("");
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [captcha, setCaptcha] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
-  const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "ok" | "error" | "submit_error">(
+    "idle",
+  );
+  const [submitting, setSubmitting] = useState(false);
   const captchaValue = useMemo(() => captcha.replace(/ /g, ""), [captcha]);
 
   useEffect(() => {
@@ -85,7 +92,7 @@ export default function ContactSection() {
     }
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextEmailError = getEmailError(email);
     if (nextEmailError) {
@@ -99,12 +106,32 @@ export default function ContactSection() {
     const match =
       Boolean(captchaValue) &&
       captchaInput.replace(/ /g, "").toLowerCase() === captchaValue.toLowerCase();
-    setStatus(match ? "ok" : "error");
-    if (match) {
-      event.currentTarget.reset();
+    if (!match) {
+      setStatus("error");
+      return;
+    }
+
+    setSubmitting(true);
+    setStatus("idle");
+
+    try {
+      await submitContactForm({
+        nameSurname,
+        email,
+        title,
+        message,
+      });
+      setStatus("ok");
+      setNameSurname("");
       setEmail("");
+      setTitle("");
+      setMessage("");
       setCaptchaInput("");
       setCaptcha(createCaptcha());
+    } catch {
+      setStatus("submit_error");
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -175,6 +202,11 @@ export default function ContactSection() {
               type="text"
               required
               autoComplete="name"
+              value={nameSurname}
+              onChange={(event) => {
+                setNameSurname(event.target.value);
+                setStatus("idle");
+              }}
               placeholder="Adı Soyadı*"
               className={fieldClass}
             />
@@ -214,6 +246,11 @@ export default function ContactSection() {
               name="cainput_subject"
               type="text"
               required
+              value={title}
+              onChange={(event) => {
+                setTitle(event.target.value);
+                setStatus("idle");
+              }}
               placeholder="Başlık*"
               className={fieldClass}
             />
@@ -227,6 +264,11 @@ export default function ContactSection() {
               required
               maxLength={1000}
               rows={5}
+              value={message}
+              onChange={(event) => {
+                setMessage(event.target.value);
+                setStatus("idle");
+              }}
               placeholder="Mesaj*"
               className={`${fieldClass} min-h-[120px] resize-y`}
             />
@@ -266,6 +308,11 @@ export default function ContactSection() {
             {status === "error" ? (
               <p className="mb-3 text-[13px] text-red-200">Captcha kodu hatalı.</p>
             ) : null}
+            {status === "submit_error" ? (
+              <p className="mb-3 text-[13px] text-red-200">
+                Form gönderilemedi. Lütfen tekrar deneyin.
+              </p>
+            ) : null}
             {status === "ok" ? (
               <p className="mb-3 text-[13px] text-green-200">
                 E-postanız gönderilmiştir.
@@ -274,9 +321,10 @@ export default function ContactSection() {
 
             <button
               type="submit"
-              className="mt-1 block rounded-md border border-black bg-[#D12E27] px-8 py-2 text-[14px] font-bold tracking-wide text-white uppercase hover:bg-[#b52620]"
+              disabled={submitting}
+              className="mt-1 block rounded-md border border-black bg-[#D12E27] px-8 py-2 text-[14px] font-bold tracking-wide text-white uppercase hover:bg-[#b52620] disabled:cursor-wait disabled:opacity-70"
             >
-              FORM GÖNDER
+              {submitting ? "GÖNDERİLİYOR..." : "FORM GÖNDER"}
             </button>
           </form>
         </div>
