@@ -56,7 +56,14 @@ export default function AdminLoginForm() {
     try {
       await signInWithEmailAndPassword(auth, nextEmail, nextPassword);
 
-      const usernameOk = await assertClinicUsername(nextUsername);
+      const userId = auth.currentUser?.uid;
+      if (!userId) {
+        setError("Giriş yapılamadı. Lütfen tekrar deneyin.");
+        setSubmitting(false);
+        return;
+      }
+
+      const usernameOk = await assertClinicUsername(userId, nextUsername);
       if (!usernameOk) {
         await signOut(auth);
         setError("Kullanıcı adı veya şifre hatalı.");
@@ -65,7 +72,7 @@ export default function AdminLoginForm() {
       }
 
       try {
-        await touchUserLastLogin();
+        await touchUserLastLogin(userId);
       } catch {
         // Auth succeeded; lastLogin update is best-effort.
       }
