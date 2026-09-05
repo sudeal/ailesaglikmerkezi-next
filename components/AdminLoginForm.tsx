@@ -1,21 +1,49 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { FaLock, FaUser } from "react-icons/fa";
 import SiteLogo from "@/components/SiteLogo";
+import { getAuthErrorMessage } from "@/lib/auth-errors";
+import { auth } from "@/lib/firebase";
+
+const ADMIN_EMAIL_DOMAIN = "capakliailesaglik.com";
 
 const fieldClass =
   "w-full border border-[#cccccc] bg-white px-3 py-2.5 text-[15px] text-[#444444] outline-none focus:border-[#DC0D15]";
 
+function toAuthEmail(usernameOrEmail: string): string {
+  const value = usernameOrEmail.trim();
+  if (!value) return "";
+  if (value.includes("@")) return value;
+  return `${value}@${ADMIN_EMAIL_DOMAIN}`;
+}
+
 export default function AdminLoginForm() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.replace("/admin/panel");
+        return;
+      }
+      setCheckingSession(false);
+    });
+    return unsubscribe;
+  }, [router]);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextUsername = username.trim();
     const nextPassword = password;
+    const nextEmail = toAuthEmail(nextUsername);
 
     if (!nextUsername || !nextPassword) {
       setError("Kullanıcı adı ve şifre zorunludur.");
@@ -23,6 +51,27 @@ export default function AdminLoginForm() {
     }
 
     setError(null);
+    setSubmitting(true);
+
+    try {
+      await signInWithEmailAndPassword(auth, nextEmail, nextPassword);
+      router.replace("/admin/panel");
+    } catch (err) {
+      const code =
+        typeof err === "object" && err && "code" in err
+          ? String((err as { code: string }).code)
+          : "";
+      setError(getAuthErrorMessage(code));
+      setSubmitting(false);
+    }
+  }
+
+  if (checkingSession) {
+    return (
+      <div className="mx-auto w-full max-w-[420px] text-center text-[15px] text-[#666666]">
+        Kontrol ediliyor...
+      </div>
+    );
   }
 
   return (
@@ -58,7 +107,7 @@ export default function AdminLoginForm() {
                 setUsername(event.target.value);
                 setError(null);
               }}
-              placeholder="Kullanıcı adınız"
+              placeholder="capakliAdmin1"
               className={`${fieldClass} pl-9`}
             />
           </div>
@@ -100,9 +149,10 @@ export default function AdminLoginForm() {
 
         <button
           type="submit"
-          className="w-full cursor-pointer rounded-md border border-black bg-[#D12E27] px-8 py-2.5 text-[14px] font-bold tracking-wide text-white uppercase hover:bg-[#b52620]"
+          disabled={submitting}
+          className="w-full cursor-pointer rounded-md border border-black bg-[#D12E27] px-8 py-2.5 text-[14px] font-bold tracking-wide text-white uppercase hover:bg-[#b52620] disabled:cursor-wait disabled:opacity-70"
         >
-          Giriş Yap
+          {submitting ? "Giriş yapılıyor..." : "Giriş Yap"}
         </button>
       </form>
     </div>
