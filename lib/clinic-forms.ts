@@ -68,6 +68,14 @@ export function subscribeClinicForms(
       const forms = snapshot.docs.map((item) =>
         mapFormDoc(item.id, item.data() as Record<string, unknown>),
       );
+      forms.sort((a, b) => {
+        if (a.status !== b.status) {
+          return a.status === "new" ? -1 : 1;
+        }
+        const aTime = a.createdAt?.getTime() ?? 0;
+        const bTime = b.createdAt?.getTime() ?? 0;
+        return bTime - aTime;
+      });
       onChange(forms);
     },
     (error) => onError?.(error),
