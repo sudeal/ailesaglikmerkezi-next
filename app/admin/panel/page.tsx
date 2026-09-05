@@ -10,9 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminPanelPage() {
-  return (
-    <main className="flex min-h-dvh items-center justify-center px-[15px] py-12">
-      <AdminPanel />
-    </main>
-  );
+  return <AdminPanel />;
 }
