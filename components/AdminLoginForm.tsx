@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { FaLock, FaUser } from "react-icons/fa";
+import SiteLogo from "@/components/SiteLogo";
 
 const fieldClass =
   "w-full border border-[#cccccc] bg-white px-3 py-2.5 text-[15px] text-[#444444] outline-none focus:border-[#DC0D15]";
@@ -25,15 +26,14 @@ export default function AdminLoginForm() {
   }
 
   return (
-    <div className="mx-auto max-w-[420px]">
-      <div className="mb-6 text-center">
-        <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-[#DC0D15] text-white">
-          <FaLock aria-hidden className="text-[22px]" />
-        </div>
-        <p className="m-0 text-[15px] leading-6 text-[#666666]">
-          Yönetim paneline erişmek için giriş yapınız.
-        </p>
+    <div className="mx-auto w-full max-w-[420px]">
+      <div className="mb-8 flex justify-center">
+        <SiteLogo href={null} />
       </div>
+
+      <p className="mb-6 text-center text-[15px] leading-6 text-[#666666]">
+        Yönetim paneline erişmek için giriş yapınız.
+      </p>
 
       <form onSubmit={handleSubmit} noValidate>
         <div className="mb-3">
