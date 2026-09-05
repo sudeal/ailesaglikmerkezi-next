@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /clinics/CapakliAileSaglikMerkezi {
+      allow read: if request.auth != null;
+      allow write: if false;
+
+      match /users/{userId} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+
+        allow update: if request.auth != null
+          && request.auth.uid == userId
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["lastLogin"]);
+
+        allow create, delete: if false;
+      }
+
+      match /forms/{formId} {
+        allow create: if isValidPublicFormCreate();
+        allow read, update, delete: if request.auth != null;
+      }
+    }
+
+    function isValidPublicFormCreate() {
+      let data = request.resource.data;
+      return data.keys().hasOnly([
+          "id",
+          "createdAt",
+          "title",
+          "nameSurname",
+          "email",
+          "message",
+          "status"
+        ])
+        && data.id == request.resource.id
+        && data.status == "new"
+        && data.createdAt == request.time
+        && data.title is string
+        && data.title.size() > 0
+        && data.title.size() <= 200
+        && data.nameSurname is string
+        && data.nameSurname.size() > 0
+        && data.nameSurname.size() <= 120
+        && data.email is string
+        && data.email.size() > 3
+        && data.email.size() <= 254
+        && data.message is string
+        && data.message.size() > 0
+        && data.message.size() <= 1000;
+    }
+  }
+}
