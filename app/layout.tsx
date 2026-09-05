@@ -3,6 +3,7 @@ import { Open_Sans } from "next/font/google";
 import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import FirebaseAnalytics from "@/components/FirebaseAnalytics";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${openSans.variable} h-full antialiased`}
     >
       <body className={`${openSans.className} min-h-full bg-white text-[#444444]`}>
+        <FirebaseAnalytics />
         <Header />
         <Navbar />
         {children}
