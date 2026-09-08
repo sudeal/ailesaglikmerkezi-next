@@ -15,7 +15,7 @@ export default function InnerPage({
   serif,
   children,
 }: {
-  title: string;
+  title?: string;
   crumbs: Crumb[];
   views?: number;
   date?: string;

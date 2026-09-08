@@ -4,6 +4,8 @@ import { saglikArticles } from "@/lib/saglik-articles";
 import { SITE_URL } from "@/lib/site";
 import { telefonHatlari } from "@/lib/telefon-hatlari";
 
+export const dynamic = "force-static";
+
 const staticPaths = [
   "/",
   "/iletisim",
